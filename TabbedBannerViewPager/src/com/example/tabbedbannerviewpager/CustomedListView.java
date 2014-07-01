@@ -18,8 +18,17 @@ import java.lang.reflect.Field;
 public class CustomedListView extends ListView {
 
     private static final String TAG = CustomedListView.class.getSimpleName();
+    /**
+     * fragment index
+     */
     private int mFIndex;
+    /**
+     * added header view
+     */
     private View mHeader;
+    /**
+     * custom adapter
+     */
     private CustomListAdapter mAdapter;
 
     public CustomedListView(Context context) {
@@ -38,6 +47,9 @@ public class CustomedListView extends ListView {
     }
 
     private void init(Context context) {
+    	/**
+    	 * disable fast scroll, for the over scroll condition
+    	 */
         setFastScrollEnabled(false);
     }
     
@@ -61,6 +73,10 @@ public class CustomedListView extends ListView {
         super.addHeaderView(v);
     }
     
+    /**
+     * initial the distance entries with first head row
+     * @param header
+     */
     private void initAdaptersDistanceEntries(View header) {
     	if (null != mAdapter) {
         	mAdapter.addViewObserverCallback(header, 
@@ -70,7 +86,9 @@ public class CustomedListView extends ListView {
 
     @Override
     protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
-        // empty implements
+        /**
+         * empty implement, for over scroll condition solving 
+         */
     }
 
 	public int getFIndex() {
@@ -81,6 +99,11 @@ public class CustomedListView extends ListView {
 		this.mFIndex = mFIndex;
 	}
     
+	/**
+	 * get the distance between listView's top and the item's top at the 'position'
+	 * @param position
+	 * @return
+	 */
 	public int getDistanceFromTop(int position) {
 		if (null == mAdapter
 				|| position < 0 
@@ -89,6 +112,11 @@ public class CustomedListView extends ListView {
 		}
 		return mAdapter.getItemDistanceFromTopAtPosition(position);
 	}
+	
+	/**
+	 * deal with the motion event dispatch
+	 * when the viewPager contains listView in the sub fragment
+	 */
 	
 	float lastMotionX = 0;
 	float lastMotionY = 0;
@@ -103,8 +131,14 @@ public class CustomedListView extends ListView {
     	switch(action) {
 	    	case MotionEvent.ACTION_MOVE: {
 	    		if (Math.abs(distanceY) > Math.abs(distanceX)) {
+	    			/**
+	    			 * intercept the motion
+	    			 */
 	    			requestDisallowInterceptTouchEvent(true);
 	    		} else {
+	    			/**
+	    			 * dispatch the motion to it's parent
+	    			 */
 	    			return false;
 	    		}
 	    		

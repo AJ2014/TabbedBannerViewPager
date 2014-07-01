@@ -23,14 +23,16 @@ import java.util.Map;
 public class CustomListAdapter extends BaseAdapter {
 
     Context context;
-    String[] items;
-    int mFIndex;
     /**
-     * 子视图高度索引
+     * items' data, also you can custom it
+     */
+    String[] items;
+    /**
+     * items' view's height entries
      */
     SparseIntArray mHeightEntries;
     /**
-     * 子视图距顶部距离索引
+     * the entries of the distance from item's top to it's parent's top
      */
     SparseIntArray mDistanceEntries;
 
@@ -39,6 +41,7 @@ public class CustomListAdapter extends BaseAdapter {
         this.items = items;
         mHeightEntries = new SparseIntArray();
         mDistanceEntries = new SparseIntArray();
+        // first item has the distance of 0
         mDistanceEntries.put(0, 0);
     }
 
@@ -71,9 +74,16 @@ public class CustomListAdapter extends BaseAdapter {
         return view;
     }
     
+    /**
+     * custom OnGlobalLayoutListener to obtain the relative item's view's height
+     * at 'position'
+     * @author Administrator
+     */
     public class CustomedOnGlobalLayoutListener implements OnGlobalLayoutListener {
+    	
     	int position;
     	View relativeView;
+    	
     	public CustomedOnGlobalLayoutListener(View view, int position) {
     		this.position = position;
     		relativeView = view;
@@ -81,19 +91,19 @@ public class CustomListAdapter extends BaseAdapter {
     	
 		@Override
 		public void onGlobalLayout() {
+			// first remove callback, avoid the loop
 			removeViewObserverCallback(relativeView, CustomedOnGlobalLayoutListener.this);
 			final ListView parent = (ListView)relativeView.getParent();
 			if (null == parent) {
 				return;
 			}
 			final int height = relativeView.getHeight();
+			// store the height
 			mHeightEntries.put(position + 1, height);
-			// 上一个item距顶部的距离
 			final int preDist = mDistanceEntries.get(position + 1);
 			final int curDist = preDist + parent.getDividerHeight() + height; 
+			// store the distance
 			mDistanceEntries.put(position + 2, curDist);
-//			Log.i("junjiang2", String.format("height[%d-%d] distance[%d-%d]", 
-//					position + 1, height, position + 2, curDist));
 		}
     	
     }

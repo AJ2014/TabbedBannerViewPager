@@ -19,20 +19,40 @@ import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity implements OnClickListener {
 
+	/**
+	 * custom banner view
+	 */
     View mCoverHeader;
     ViewPager mViewPager;
+    /**
+     * tab view container
+     */
     LinearLayout mTabGroup;
     
     public static int curMargin = 0, minMargin, maxMargin = 0;
-
+    /**
+     * current fragment index
+     */
     int mCurPageIndex = 0;
     Fragment[] mFragments;
 
     Handler mHander; 
+    /**
+     * value inserter, used to set header's margin
+     */
     SmoothScroller mScroller;
-    
+    /**
+     * auto scroll invoked by page select callback 
+     */
     boolean mIsAutoScroll = false;
-    int preIndex = -1;
+    /**
+     * current fragment's listView's scroll distance
+     */
+ 	int scrollDistance = 0;
+ 	/**
+ 	 * current margin changed range, used to sync the listView's scroll
+ 	 */
+ 	int marginDist = 0;
     
     @Override
     public void onClick(View v) {
@@ -65,6 +85,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         mViewPager = (ViewPager) findViewById(R.id.main_page_container);
         mCoverHeader = findViewById(R.id.main_banner);
         mTabGroup = (LinearLayout) findViewById(R.id.tab_container);
+        /**
+         * whole cover header's height - tab view container's height
+         */
         minMargin = -ToolFunctions.dip2px(getApplicationContext(), 100f);
         mHander = new Handler(getMainLooper());
         mScroller = SmoothScroller.getInstance();
@@ -117,9 +140,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
             public void onPageSelected(final int i) {
                 if (i != mCurPageIndex) {
                 	// 若跳转到未初始化的fragment?
-                	preIndex = mCurPageIndex;
+                	final int preIndex = mCurPageIndex;
                 	mCurPageIndex = i;
                 	if (curMargin == minMargin) {// 若Tab已经置顶 
+                		/**
+                		 * reset the current page 
+                		 */
                 		reAdjustSiblings(i);
                 		reAdjustSiblings(preIndex < i ? i + 1 : i - 1);
                 	} else {// 否则第i页执行autoScroll
@@ -149,9 +175,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         mViewPager.setCurrentItem(0);
 	}
 
-	// 当前滑动距离
-	int scrollDistance = 0;
-	
 	private void reAdjustSiblings(int position) {
 		SubFragment cFragment = null; 
 		if (position >= 0 && position < mFragments.length) {
@@ -210,7 +233,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
             final int distanceFromTop = absListView.getDistanceFromTop(first);
             final int top = child.getTop();
             scrollDistance = distanceFromTop - top;
-//            Log.i("junjiang2", "update scroll distance=" + scrollDistance);
             //更新TabView margin
             setViewMarginTop(mCoverHeader, -scrollDistance);
         }
@@ -237,7 +259,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         
     }
 
-    int marginDist = 0;
     private void setViewMarginTop(View view, int margin) {
 
         margin = margin > maxMargin ? maxMargin : margin;
@@ -255,7 +276,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         }
         
         curMargin = margin;
-        Log.i("junjiang2", "set margin=" + curMargin);
     }
 
 }
