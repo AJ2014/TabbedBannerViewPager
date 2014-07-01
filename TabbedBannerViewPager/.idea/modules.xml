@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/TabbedBannerViewPager.iml" filepath="$PROJECT_DIR$/TabbedBannerViewPager.iml" />
+      <module fileurl="file://E:/git/repos/android-simple-pinned-header-listview/android-simple-pinned-header-listview.iml" filepath="E:/git/repos/android-simple-pinned-header-listview/android-simple-pinned-header-listview.iml" />
+    </modules>
+  </component>
+</project>
+
