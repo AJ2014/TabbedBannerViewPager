@@ -72,7 +72,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         mFragments = new Fragment[] {
                 new SubFragment(0, null, mOnScrollListener),
                 new SubFragment(1, null, mOnScrollListener),
-                new SubFragment(2, null, mOnScrollListener)
+                new SubFragment(2, null, mOnScrollListener),
+                new SubFragment(3, null, mOnScrollListener),
+                new SubFragment(4, null, mOnScrollListener)
         };
       
         LayoutParams lParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -92,6 +94,17 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         tab2.setTag(2);
         tab2.setOnClickListener(this);
         mTabGroup.addView(tab2, lParams);
+        
+        TextView tab3 = new TextView(getApplicationContext());
+        tab3.setText("T3");
+        tab3.setTag(3);
+        tab3.setOnClickListener(this);
+        mTabGroup.addView(tab3, lParams);
+        TextView tab4 = new TextView(getApplicationContext());
+        tab4.setText("T4");
+        tab4.setTag(4);
+        tab4.setOnClickListener(this);
+        mTabGroup.addView(tab4, lParams);
         
         mViewPager.setAdapter(new CustomFragmentPagerAdapter(fManager, mFragments));
 
