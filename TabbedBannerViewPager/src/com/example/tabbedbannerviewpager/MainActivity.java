@@ -153,6 +153,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
                 		if (((SubFragment)mFragments[i]).requestAdjust(0, curMargin)) {
                 			((SubFragment)mFragments[i]).scrollListBy(-(minMargin - curMargin));
                 		} else {// ÈôÒÑ¾­scroll³ö·¶Î§
+                			setSiblingSelections(preIndex);
                 			setSiblingSelections(i);
                 			((SubFragment)mFragments[i]).requestAdjust(0, curMargin);
                 			mScroller.smoothScroll(mHander, curMargin, minMargin, new IScrollAction() {
